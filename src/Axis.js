@@ -17,7 +17,7 @@ SPDX-License-Identifier: Apache-2.0
 */
 
 import React, {Component} from 'react'
-import { Circle, G, Path, Text } from 'react-native-svg'
+import { Circle, G, Path, Text, Line } from 'react-native-svg'
 import { fontAdapt } from './util'
 import _ from 'lodash'
 const Pathjs = require('paths-js/path')
@@ -108,6 +108,37 @@ export class AxisStruct {
 
 export default class Axis extends Component {
 
+  _renderTicks (options, textAnchor) {
+    if (options.tickType === 'line') {
+      let x
+      switch (textAnchor) {
+        case 'start':
+          x = 0.5
+          break
+        case 'end':
+          x = -0.5
+          break
+        case 'middle':
+          x = 0
+          break
+      }
+      return (
+        <Line
+          x1={x}
+          y1={0}
+          x2={x}
+          y2={5}
+          stroke={options.tickColor}
+          strokeWidth={1}
+        />
+      )
+    } else {
+      return (
+        <Circle r={options.tickSize} cx="0" cy="0" stroke={options.tickColor} fill={options.tickColor} />
+      )
+    }
+  }
+
   render() {
     const { chartArea, options, scale } = this.props
     const horizontal = options.orient ==='top' || options.orient ==='bottom'
@@ -120,8 +151,20 @@ export default class Axis extends Component {
     if (options.orient === 'right') textAnchor = 'start'
 
     let xy = [0,0]
-    if (options.orient === 'top')  xy = [0,-5]
-    if (options.orient === 'bottom') xy = [0,5]
+    if (options.orient === 'top')  {
+      if (options.tickType === 'line') {
+        xy = [0, -10]
+      } else {
+        xy = [0, -5]
+      }
+    }
+    if (options.orient === 'bottom') {
+      if (options.tickType === 'line') {
+        xy = [0,10]
+      } else {
+        xy = [0,5]
+      }
+    }
     if (options.orient === 'left')  xy = [-5,-10]
     if (options.orient === 'right')  xy = [5,5]
 
@@ -147,18 +190,18 @@ export default class Axis extends Component {
 
     const textStyle = fontAdapt(options.label)
 
-    const ticks =_.map(axis.ticks, function (c, i) {
+    const tickValues = options.tickValues
+    const ticks =_.map(axis.ticks, (c, i) => {
       const label = options.labelFunction !== undefined? options.labelFunction.apply(this, [c]) : c
       let scaleBase = isNaN(c) ? i : c
       let gxy = horizontal ? [scale(scaleBase),chartArea.y.min]:[chartArea.x.min,scale(scaleBase)]
 
+      textAnchor = (tickValues && tickValues[i] && tickValues[i].textAnchor) || textAnchor
       let returnValue
       if (label !== undefined && label !== null) {
         returnValue =
           <G key={i} x={gxy[0]} y={gxy[1]}>
-              {options.showTicks &&
-                <Circle r={options.tickSize} cx="0" cy="0" stroke={options.tickColor} fill={options.tickColor} />
-              }
+              {options.showTicks && this._renderTicks(options, textAnchor)}
               {options.showLabels &&
                 <Text x={xy[0]} y={xy[1]}
                       fontFamily={textStyle.fontFamily}
