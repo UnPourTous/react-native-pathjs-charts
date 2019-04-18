@@ -1,4 +1,4 @@
-** Capital One built this project to help our engineers as well as users in the react native community. We have decided to focus on alternatives to react native, and, unfortunately, we are no longer able to fully support the project. We will be archiving the project on February 28th where it will be available in a read-only state.  Feel free to fork the project and maintain your own version. **
+** Capital One built this project to help our engineers as well as users in the react native community. We have decided to focus on alternatives to react native, and, unfortunately, we are no longer able to fully support the project. We have archived the project oas of Mar 1 2018 where it will be available in a read-only state.  Feel free to fork the project and maintain your own version. **
 
 
 react-native-pathjs-charts
@@ -23,7 +23,7 @@ npm install react-native-pathjs-charts --save
 react-native link react-native-svg
 ```
 
-For further information on usage, see the [docs](http://www.capitalone.io/react-native-pathjs-charts/)
+For further information on usage, see the [docs](https://capitalone.github.io/react-native-pathjs-charts/)
 
 
 ## Current Features
