@@ -132,4 +132,13 @@ export class Options {
   get R(){return this.props.R || (this.props.options && this.props.options.R)}
   get label(){return this.props.label || (this.props.options && this.props.options.label) || {}}
   get animate() {return this.props.animate || (this.props.options && this.props.options.animate) || {}}
+  get areaOpacity() {
+    if (this.props.areaOpacity !== undefined) {
+      return this.props.areaOpacity
+    } else if (this.options && this.options.areaOpacity !== undefined) {
+      return this.options.areaOpacity
+    } else {
+      return 0.5
+    }
+  }
 }
