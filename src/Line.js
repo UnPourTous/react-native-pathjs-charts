@@ -279,7 +279,7 @@ export default class LineChart extends Component {
               <Path
                 key={'areas' + i}
                 d={c.area.path.print()}
-                fillOpacity={0.5}
+                fillOpacity={options.areaOpacity}
                 stroke="none"
                 fill={this.color(i)}
               />
